@@ -13,9 +13,14 @@ const AppNavigator=() => {
     return ( 
 
        <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator
+            screenOptions={{
+                headerShown: false, 
+              }}>
 
-                <Stack.Screen name="JobFinder" component={ApplicationForm} /> 
+                <Stack.Screen name="JobFinder" component={JobFinder} /> 
+                <Stack.Screen name="ApplicationForm" component={ApplicationForm} /> 
+                <Stack.Screen name="SavedJobs" component={SavedJobs} /> 
 
             </Stack.Navigator>
         </NavigationContainer>

@@ -1,9 +1,18 @@
+console.log("shit loaded");
+
+import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { Props } from "../navigation/props";
-import { View, Text} from "react-native";
-const JobFinder:React.FC<Props> = (navigation) =>
-    {
-        return(
-            <View><Text>JobFinder</Text></View>
-        )
-    }   
-    export default JobFinder ;     
+import FetchJobs from "../components/JobFetch";
+const ApplicationForm: React.FC<Props> = ({ navigation }) => {
+    return (
+        <>
+            <Text>Job Finder</Text>
+            <FetchJobs/>
+            <TouchableOpacity onPress={() => navigation.navigate('ApplicationForm')}>
+                <Text>Application Form</Text>
+            </TouchableOpacity>
+
+        </>
+    )
+}
+export default ApplicationForm;     

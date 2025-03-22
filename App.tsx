@@ -1,13 +1,14 @@
-import { StyleSheet, Text, SafeAreaView, StatusBar } from 'react-native';
+import {SafeAreaView} from 'react-native';
 import AppNavigator from './src/navigation/AppNavigator';
+import { styles } from './src/styles/styles';
+
 
 export default function App() {
   return (
-    <SafeAreaView style={{paddingTop: StatusBar.currentHeight}}>
-    <Text>asd</Text>
-      <AppNavigator/>
-      
-   </SafeAreaView>
+    
+    <SafeAreaView style={styles.container}>
+      <AppNavigator />
+    </SafeAreaView>
   );
-}
+};
 

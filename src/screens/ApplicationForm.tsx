@@ -1,16 +1,17 @@
-console.log("shit loaded");
-
-import { SafeAreaView, View, Text, TouchableOpacity} from "react-native";
+import {Text, TouchableOpacity } from "react-native";
 import { Props } from "../navigation/props";
-const ApplicationForm: React.FC<Props> = ({navigation}) =>
-    {
-        return(
-            <>
-                <Text>Application Form</Text>
-                <TouchableOpacity 
-    onPress={() => navigation.navigate('Cart')} ></TouchableOpacity>
+import { SafeAreaView } from "react-native-safe-area-context";
+import Form from "../components/Form";
+const ApplicationForm: React.FC<Props> = ({ navigation }) => {
+    return (
+        <SafeAreaView>
+            <Text>Application Form</Text>
+            <Form></Form>
+            <TouchableOpacity onPress={() => navigation.navigate('SavedJobs')}>
+                <Text>Saved Jobs</Text>
+            </TouchableOpacity>
 
-            </>
-        )
-    }   
-    export default ApplicationForm ;     
+        </SafeAreaView>
+    )
+}
+export default ApplicationForm;     
