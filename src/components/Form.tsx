@@ -1,53 +1,109 @@
-import React from 'react';
-import { View, TextInput, Text, Button } from 'react-native';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import React from "react";
+import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { Formik, FormikHelpers } from "formik";
+import * as Yup from "yup";
+import { useNavigation } from "@react-navigation/native";
+import { JobListNavigationProp } from "../navigation and context/NavTypes";
+import { styles } from "../styles/styles";
+import { useContext } from "react";
+import { Context } from "../navigation and context/Context";
 
-// Define TypeScript interface for form values
 interface FormValues {
-  email: string;
-  password: string;
+   name: string;
+   email: string;
+   contactno: string;
+   why: string;
 }
 
-// Validation Schema using Yup
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email format').required('Email is required'),
-  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+   name: Yup.string().required("Name is required"),
+   email: Yup.string().email("Invalid email format").required("Email is required"),
+   contactno: Yup.string().matches(/^\d{11}$/, "Contact Number must be exactly 11 digits").required("Contact Number is required"),
+   why: Yup.string().required("Answer is required"),
 });
 
 const Form: React.FC = () => {
-  return (
-    <Formik<FormValues>
-      initialValues={{ email: '', password: '' }}
-      validationSchema={validationSchema}
-      onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
-    >
-      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-        <View style={{ padding: 20 }}>
-          <TextInput
-            placeholder="Email"
-            onChangeText={handleChange('email')}
-            onBlur={handleBlur('email')}
-            value={values.email}
-            style={{ borderWidth: 1, padding: 10, marginBottom: 5 }}
-          />
-          {touched.email && errors.email && <Text style={{ color: 'red' }}>{errors.email}</Text>}
+   const navigation = useNavigation<JobListNavigationProp>();
+   const { isDarkMode } = useContext(Context);
 
-          <TextInput
-            placeholder="Password"
-            secureTextEntry
-            onChangeText={handleChange('password')}
-            onBlur={handleBlur('password')}
-            value={values.password}
-            style={{ borderWidth: 1, padding: 10, marginBottom: 5 }}
-          />
-          {touched.password && errors.password && <Text style={{ color: 'red' }}>{errors.password}</Text>}
+   const onSubmit = (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
+      alert("You have successfully submitted an application!");
+      resetForm();
+      navigation.navigate("JobFinder");
+   };
 
-          <Button title="Submit" onPress={handleSubmit as () => void} />
-        </View>
-      )}
-    </Formik>
-  );
+   return (
+      <View style={[styles.contentContainer]}>
+         <Text style={[styles.header, isDarkMode && styles.darkHeader, { marginBottom: 20 }]}>Application Form</Text>
+         <Formik<FormValues>
+            initialValues={{ name: "", email: "", contactno: "", why: "" }}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+         >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+               <View>
+                  <TextInput
+                     placeholder="Name"
+                     placeholderTextColor={isDarkMode ? "#aaa" : "#000"}
+                     onChangeText={handleChange("name")}
+                     onBlur={handleBlur("name")}
+                     value={values.name}
+                     style={[styles.input, isDarkMode && styles.darkInput]}
+                  />
+                  {touched.name && errors.name && (
+                     <Text style={[styles.error, isDarkMode && styles.darkError]}>{errors.name}</Text>
+                  )}
+
+                  <TextInput
+                     placeholder="Email"
+                     placeholderTextColor={isDarkMode ? "#aaa" : "#000"}
+                     onChangeText={handleChange("email")}
+                     onBlur={handleBlur("email")}
+                     value={values.email}
+                     style={[styles.input, isDarkMode && styles.darkInput]}
+                  />
+                  {touched.email && errors.email && (
+                     <Text style={[styles.error, isDarkMode && styles.darkError]}>{errors.email}</Text>
+                  )}
+
+                  <TextInput
+                     placeholder="Contact Number"
+                     placeholderTextColor={isDarkMode ? "#aaa" : "#000"}
+                     onChangeText={handleChange("contactno")}
+                     onBlur={handleBlur("contactno")}
+                     value={values.contactno}
+                     keyboardType="numeric"
+                     style={[styles.input, isDarkMode && styles.darkInput]}
+                  />
+                  {touched.contactno && errors.contactno && (
+                     <Text style={[styles.error, isDarkMode && styles.darkError]}>{errors.contactno}</Text>
+                  )}
+
+                  <TextInput
+                     placeholder="Why should we hire you?"
+                     placeholderTextColor={isDarkMode ? "#aaa" : "#000"}
+                     onChangeText={handleChange("why")}
+                     onBlur={handleBlur("why")}
+                     value={values.why}
+                     multiline
+                     numberOfLines={10}
+                     style={[styles.input, styles.multilineInput, isDarkMode && styles.darkInput]}
+                  />
+                  {touched.why && errors.why && (
+                     <Text style={[styles.error, isDarkMode && styles.darkError]}>{errors.why}</Text>
+                  )}
+
+                  <TouchableOpacity
+                     style={[styles.button, { width: "60%", alignSelf: "center" }, isDarkMode && styles.darkButton]}
+                     onPress={handleSubmit as () => void}
+                  >
+                     <Text style={[styles.buttonText]}>Submit</Text>
+                  </TouchableOpacity>
+               </View>
+            )}
+         </Formik>
+      </View>
+   );
 };
 
 export default Form;
